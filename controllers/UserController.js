@@ -54,4 +54,8 @@ module.exports = {
       res.json(null);
     }
   },
+
+  logout: (req, res) => {
+    res.cookie("token", "").json(true);
+  },
 };
