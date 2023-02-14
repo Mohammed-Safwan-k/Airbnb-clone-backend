@@ -1,6 +1,8 @@
 const bcrypt = require("bcryptjs");
 const UserModel = require("../models/User");
 const jwt = require("jsonwebtoken");
+const imageDownloader = require("image-downloader");
+const fs = require("fs");
 
 const bcryptSalt = bcrypt.genSaltSync(10);
 
@@ -53,6 +55,30 @@ module.exports = {
     } else {
       res.json(null);
     }
+  },
+
+  uploadbylink: async (req, res) => {
+    console.log(process.cwd(), "8978978974546545622 3312123");
+    const { link } = req.body;
+    const newName = "photo" + Date.now() + ".jpg";
+    await imageDownloader.image({
+      url: link,
+      dest: process.cwd() + "/public/photos/" + newName,
+    });
+    res.json(newName);
+  },
+
+  upload: async (req, res) => {
+    const uploadedFiles = [];
+    for (let i = 0; i < req.files.length; i++) {
+      const { path, originalname } = req.files[i];
+      const parts = originalname.split(".");
+      const ext = parts[parts.length - 1];
+      const newPath = path + "." + ext;
+      fs.renameSync(path, newPath);
+      uploadedFiles.push(newPath.replace("public/photos", ""));
+    }
+    res.json(uploadedFiles);
   },
 
   logout: (req, res) => {
