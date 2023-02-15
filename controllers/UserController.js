@@ -3,6 +3,7 @@ const UserModel = require("../models/User");
 const jwt = require("jsonwebtoken");
 const imageDownloader = require("image-downloader");
 const fs = require("fs");
+const PlaceModel = require("../models/Place");
 
 const bcryptSalt = bcrypt.genSaltSync(10);
 
@@ -58,7 +59,6 @@ module.exports = {
   },
 
   uploadbylink: async (req, res) => {
-    console.log(process.cwd(), "8978978974546545622 3312123");
     const { link } = req.body;
     const newName = "photo" + Date.now() + ".jpg";
     await imageDownloader.image({
@@ -79,6 +79,89 @@ module.exports = {
       uploadedFiles.push(newPath.replace("public/photos", ""));
     }
     res.json(uploadedFiles);
+  },
+
+  addplaces: (req, res) => {
+    const { token } = req.cookies;
+    const {
+      title,
+      address,
+      addedPhotos,
+      description,
+      perks,
+      extraInfo,
+      checkIn,
+      checkOut,
+      maxGuests,
+    } = req.body;
+
+    jwt.verify(token, process.env.JWT_KEY, {}, async (error, userData) => {
+      if (error) throw error;
+      const placeDoc = await PlaceModel.create({
+        owner: userData.id,
+        title,
+        address,
+        photos: addedPhotos,
+        description,
+        perks,
+        extraInfo,
+        checkIn,
+        checkOut,
+        maxGuests,
+      });
+      res.json(placeDoc);
+    });
+  },
+
+  allPlaces: (req, res) => {
+    const { token } = req.cookies;
+    jwt.verify(token, process.env.JWT_KEY, {}, async (error, userData) => {
+      const { id } = userData;
+      const places = await PlaceModel.find({ owner: id });
+      res.json(places);
+    });
+  },
+
+  editPlaces: async (req, res) => {
+    const { id } = req.params;
+    const placeData = await PlaceModel.findById(id);
+    res.json(placeData);
+  },
+
+  updateplaces: async (req, res) => {
+    const { token } = req.cookies;
+    const {
+      id,
+      title,
+      address,
+      addedPhotos,
+      description,
+      perks,
+      extraInfo,
+      checkIn,
+      checkOut,
+      maxGuests,
+    } = req.body;
+    jwt.verify(token, process.env.JWT_KEY, {}, async (error, userData) => {
+      if (error) throw error;
+      const placeDoc = await PlaceModel.findById(id);
+      //here userData.id is in string the placeDoc.owner is an objectId so to make it string we use this
+      if (userData.id === placeDoc.owner.toString()) {
+        placeDoc.set({
+          title,
+          address,
+          photos: addedPhotos,
+          description,
+          perks,
+          extraInfo,
+          checkIn,
+          checkOut,
+          maxGuests,
+        });
+        await placeDoc.save();
+        res.json("ok");
+      }
+    });
   },
 
   logout: (req, res) => {

@@ -21,8 +21,18 @@ router.post(
   controller.upload
 );
 
+router.post("/addplaces", controller.addplaces);
+
 //****************************** GET ROUTES ****************************** //
 
 router.get("/profile", controller.profile);
+
+router.get("/allPlaces", controller.allPlaces);
+
+router.get("/editPlaces/:id", controller.editPlaces);
+
+//****************************** PUT ROUTES ****************************** //
+
+router.put("/updateplaces", controller.updateplaces);
 
 module.exports = router;
