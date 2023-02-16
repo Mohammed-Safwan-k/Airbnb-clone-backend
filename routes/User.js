@@ -37,6 +37,8 @@ router.get("/allPlaces", controller.allPlaces);
 
 router.get("/singlePlace/:id", controller.singlePlace);
 
+router.get("/allBookings", controller.allBookings);
+
 //****************************** PUT ROUTES ****************************** //
 
 router.put("/updateplaces", controller.updateplaces);

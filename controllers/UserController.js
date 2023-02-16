@@ -6,6 +6,8 @@ const fs = require("fs");
 const PlaceModel = require("../models/Place");
 const BookingModel = require("../models/Booking");
 
+const getUserDataFromToken = require("../middleware/token");
+
 const bcryptSalt = bcrypt.genSaltSync(10);
 
 module.exports = {
@@ -207,6 +209,13 @@ module.exports = {
       .catch((err) => {
         throw err;
       });
+  },
+
+  allBookings: async (req, res) => {
+    const { token } = req.cookies;
+    // also we can pass by using getUserDataFromToken(req) if we are using req there
+    const userData = await getUserDataFromToken(token);
+    res
   },
 
   logout: (req, res) => {
