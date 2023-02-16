@@ -33,6 +33,8 @@ router.get("/editPlaces/:id", controller.editPlaces);
 
 router.get("/allPlaces", controller.allPlaces);
 
+router.get("/singlePlace/:id", controller.singlePlace);
+
 //****************************** PUT ROUTES ****************************** //
 
 router.put("/updateplaces", controller.updateplaces);

@@ -173,6 +173,12 @@ module.exports = {
     res.json(allPlaces);
   },
 
+  singlePlace: async (req, res) => {
+    const { id } = req.params;
+    const placeData = await PlaceModel.findById(id);
+    res.json(placeData);
+  },
+
   logout: (req, res) => {
     res.cookie("token", "").json(true);
   },
