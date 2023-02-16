@@ -113,7 +113,7 @@ module.exports = {
     });
   },
 
-  allPlaces: (req, res) => {
+  allUserPlaces: (req, res) => {
     const { token } = req.cookies;
     jwt.verify(token, process.env.JWT_KEY, {}, async (error, userData) => {
       const { id } = userData;
@@ -162,6 +162,11 @@ module.exports = {
         res.json("ok");
       }
     });
+  },
+
+  allPlaces: async (req, res) => {
+    const allPlaces = await PlaceModel.find();
+    res.json(allPlaces);
   },
 
   logout: (req, res) => {

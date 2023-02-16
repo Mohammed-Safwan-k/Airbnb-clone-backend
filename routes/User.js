@@ -27,9 +27,11 @@ router.post("/addplaces", controller.addplaces);
 
 router.get("/profile", controller.profile);
 
-router.get("/allPlaces", controller.allPlaces);
+router.get("/allUserPlaces", controller.allUserPlaces);
 
 router.get("/editPlaces/:id", controller.editPlaces);
+
+router.get("/allPlaces", controller.allPlaces);
 
 //****************************** PUT ROUTES ****************************** //
 
