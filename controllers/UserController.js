@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const imageDownloader = require("image-downloader");
 const fs = require("fs");
 const PlaceModel = require("../models/Place");
+const BookingModel = require("../models/Booking");
 
 const bcryptSalt = bcrypt.genSaltSync(10);
 
@@ -177,6 +178,35 @@ module.exports = {
     const { id } = req.params;
     const placeData = await PlaceModel.findById(id);
     res.json(placeData);
+  },
+
+  booking: (req, res) => {
+    const {
+      place,
+      checkIn,
+      checkOut,
+      numberOfGuests,
+      name,
+      email,
+      phone,
+      price,
+    } = req.body;
+    BookingModel.create({
+      place,
+      checkIn,
+      checkOut,
+      numberOfGuests,
+      name,
+      email,
+      phone,
+      price,
+    })
+      .then((doc) => {
+        res.json(doc);
+      })
+      .catch((err) => {
+        throw err;
+      });
   },
 
   logout: (req, res) => {

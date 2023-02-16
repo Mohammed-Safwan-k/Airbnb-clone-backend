@@ -23,6 +23,8 @@ router.post(
 
 router.post("/addplaces", controller.addplaces);
 
+router.post("/booking", controller.booking)
+
 //****************************** GET ROUTES ****************************** //
 
 router.get("/profile", controller.profile);
