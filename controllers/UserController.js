@@ -93,6 +93,7 @@ module.exports = {
       checkIn,
       checkOut,
       maxGuests,
+      price,
     } = req.body;
 
     jwt.verify(token, process.env.JWT_KEY, {}, async (error, userData) => {
@@ -108,6 +109,7 @@ module.exports = {
         checkIn,
         checkOut,
         maxGuests,
+        price,
       });
       res.json(placeDoc);
     });
@@ -141,6 +143,7 @@ module.exports = {
       checkIn,
       checkOut,
       maxGuests,
+      price,
     } = req.body;
     jwt.verify(token, process.env.JWT_KEY, {}, async (error, userData) => {
       if (error) throw error;
@@ -157,6 +160,7 @@ module.exports = {
           checkIn,
           checkOut,
           maxGuests,
+          price,
         });
         await placeDoc.save();
         res.json("ok");
