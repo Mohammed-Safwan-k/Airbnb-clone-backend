@@ -6,7 +6,7 @@ const fs = require("fs");
 const PlaceModel = require("../models/Place");
 const BookingModel = require("../models/Booking");
 
-const getUserDataFromToken = require("../middleware/token");
+const tokenMiddleware = require("../middleware/token");
 
 const bcryptSalt = bcrypt.genSaltSync(10);
 
@@ -182,7 +182,9 @@ module.exports = {
     res.json(placeData);
   },
 
-  booking: (req, res) => {
+  booking: async (req, res) => {
+    const { token } = req.cookies;
+    const userData = await tokenMiddleware.getUserDataFromToken(token);
     const {
       place,
       checkIn,
@@ -194,6 +196,7 @@ module.exports = {
       price,
     } = req.body;
     BookingModel.create({
+      user: userData.id,
       place,
       checkIn,
       checkOut,
@@ -214,8 +217,8 @@ module.exports = {
   allBookings: async (req, res) => {
     const { token } = req.cookies;
     // also we can pass by using getUserDataFromToken(req) if we are using req there
-    const userData = await getUserDataFromToken(token);
-    res
+    const userData = await tokenMiddleware.getUserDataFromToken(token);
+    res.json(await BookingModel.find({ user: userData.id }).populate('place'));
   },
 
   logout: (req, res) => {
